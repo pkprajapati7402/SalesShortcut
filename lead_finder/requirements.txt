@@ -1,0 +1,8 @@
+google-adk==1.0.0
+a2a-sdk==0.2.5
+deprecated>=1.2.14
+requests==2.31.0
+uvicorn==0.34.0
+pydantic>=2.11.3
+httpx==0.28.1
+googlemaps==4.10.0

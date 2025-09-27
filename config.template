@@ -1,0 +1,73 @@
+# SalesShortcut A2A Project Environment Variables Template
+# ========================================================
+# Copy this to .env and fill in your API keys
+# ========================================================
+
+# Required for Gemini LLM inference
+GOOGLE_API_KEY=your_google_api_key_here
+
+# Optional API keys for other LLM providers
+OPENAI_API_KEY=your_openai_api_key_here
+ANTHROPIC_API_KEY=your_anthropic_api_key_here
+
+# Model Configuration
+MODEL=gemini-2.0-flash-lite
+TEMPERATURE=0.2
+TOP_P=0.95
+TOP_K=40
+
+# ================================================
+# BIGQUERY CONFIGURATION
+# ================================================
+# Google Cloud Project ID (required for BigQuery)
+GOOGLE_CLOUD_PROJECT=your_gcp_project_id_here
+
+# BigQuery dataset and table configuration
+DATASET_ID=lead_finder_data
+TABLE_ID=business_leads
+
+# ================================================
+# GOOGLE MAPS API CONFIGURATION  
+# ================================================
+# Google Maps API Key (for Places API)
+GOOGLE_MAPS_API_KEY=your_google_maps_api_key_here
+
+# ================================================
+# OUTREACH AGENT CONFIGURATION
+# ================================================
+# ElevenLabs Configuration (for real phone calls)
+ELEVENLABS_API_KEY=your_elevenlabs_api_key
+ELEVENLABS_AGENT_ID=your_agent_id
+ELEVENLABS_PHONE_NUMBER_ID=your_phone_number_id
+
+# Email Configuration
+SMTP_SERVER=smtp.gmail.com
+SMTP_PORT=587
+EMAIL_USERNAME=your_email@gmail.com
+EMAIL_PASSWORD=your_app_password
+FROM_EMAIL=your_email@gmail.com
+
+# Legacy Twilio (optional fallback)
+TWILIO_ACCOUNT_SID=your_twilio_sid
+TWILIO_AUTH_TOKEN=your_twilio_token
+TWILIO_PHONE_NUMBER=your_twilio_number
+
+# ================================================
+# ADDITIONAL CONFIGURATION
+# ================================================
+# Force simple mode to avoid dependency conflicts
+FORCE_SIMPLE_MODE=false
+
+# ================================================
+# SETUP INSTRUCTIONS:
+# ================================================
+# 1. Copy this file to .env: cp config.template .env
+# 2. Replace 'your_*_here' values with your actual API keys
+# 3. For Google Maps API, enable these APIs in Google Cloud Console:
+#    - Places API
+#    - Geocoding API  
+#    - Maps JavaScript API
+# 4. For BigQuery, ensure your service account has these roles:
+#    - BigQuery Data Editor
+#    - BigQuery Job User
+# 5. Test with: source venv/bin/activate && python -m lead_finder 

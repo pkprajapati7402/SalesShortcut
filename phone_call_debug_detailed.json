@@ -1,0 +1,19 @@
+{
+  "business_data": {
+    "phone_number": "4353173849",
+    "created_at": "2025-06-28T16:51:57.510588",
+    "email": null,
+    "updated_at": "2025-06-28T16:51:57.510590",
+    "name": "Mock Business 2 - Logan",
+    "id": "generated_-804217871298594782",
+    "status": "found",
+    "phone": "4353173849",
+    "description": null,
+    "notes": [
+      "AgentType.LEAD_FINDER: Successfully discovered business: Mock Business 2 - Logan"
+    ],
+    "city": "Logan"
+  },
+  "proposal": "Dear Logan,\n\nWe understand that your business, Mock Business 2 - Logan, is looking to establish a strong online presence. While specific details about your business are currently unavailable, a professional website can be a game-changer. It will showcase your services, connect you with potential customers, and provide essential contact information. A well-designed website can significantly boost your visibility and help you attract new business.\n\nOur team specializes in creating custom websites designed to achieve your business goals. We're ready to help you establish a solid online foundation. Would you be available next week for a brief call to discuss your online needs and how we can help?\n",
+  "extracted_phone": "4353173849"
+}

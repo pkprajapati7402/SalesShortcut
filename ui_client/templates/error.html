@@ -1,0 +1,266 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Error - SalesShortcut</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link href="{{ url_for('static', path='css/style.css') }}" rel="stylesheet">
+    <style>
+        .error-container {
+            max-width: 600px;
+            margin: 2rem auto;
+            text-align: center;
+            color: white;
+        }
+        
+        .error-card {
+            background: white;
+            border-radius: var(--border-radius-lg);
+            box-shadow: var(--shadow-xl);
+            overflow: hidden;
+            margin-bottom: 2rem;
+        }
+        
+        .error-header {
+            background: linear-gradient(135deg, var(--danger-color), #dc2626);
+            color: white;
+            padding: 2rem;
+        }
+        
+        .error-icon {
+            font-size: 4rem;
+            margin-bottom: 1rem;
+            display: block;
+        }
+        
+        .error-title {
+            font-size: 2rem;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+        }
+        
+        .error-subtitle {
+            font-size: 1.1rem;
+            opacity: 0.9;
+        }
+        
+        .error-body {
+            padding: 2rem;
+            color: var(--gray-700);
+        }
+        
+        .error-message {
+            background: var(--gray-50);
+            border-left: 4px solid var(--danger-color);
+            padding: 1rem;
+            margin: 1rem 0;
+            border-radius: 0 var(--border-radius) var(--border-radius) 0;
+            text-align: left;
+            font-family: var(--font-mono);
+            font-size: 0.9rem;
+            color: var(--gray-800);
+        }
+        
+        .error-actions {
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+        
+        .action-button {
+            padding: 0.75rem 1.5rem;
+            border-radius: var(--border-radius);
+            text-decoration: none;
+            font-weight: 500;
+            transition: all 0.2s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        
+        .action-button.primary {
+            background: var(--primary-color);
+            color: white;
+        }
+        
+        .action-button.primary:hover {
+            background: var(--primary-dark);
+            transform: translateY(-1px);
+        }
+        
+        .action-button.secondary {
+            background: var(--gray-100);
+            color: var(--gray-700);
+            border: 1px solid var(--gray-300);
+        }
+        
+        .action-button.secondary:hover {
+            background: var(--gray-200);
+            transform: translateY(-1px);
+        }
+        
+        .troubleshooting {
+            background: var(--gray-800);
+            color: white;
+            padding: 2rem;
+            border-radius: var(--border-radius-lg);
+            text-align: left;
+        }
+        
+        .troubleshooting h3 {
+            color: white;
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        
+        .troubleshooting ul {
+            list-style: none;
+            padding: 0;
+        }
+        
+        .troubleshooting li {
+            padding: 0.5rem 0;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        
+        .troubleshooting li:last-child {
+            border-bottom: none;
+        }
+        
+        .troubleshooting i {
+            color: var(--accent-color);
+            width: 16px;
+        }
+        
+        @media (max-width: 768px) {
+            .error-container {
+                margin: 1rem;
+            }
+            
+            .error-actions {
+                flex-direction: column;
+                align-items: center;
+            }
+            
+            .action-button {
+                width: 100%;
+                max-width: 300px;
+                justify-content: center;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="error-container">
+            <div class="error-card">
+                <div class="error-header">
+                    <i class="fas fa-exclamation-triangle error-icon"></i>
+                    <h1 class="error-title">Oops! Something went wrong</h1>
+                    <p class="error-subtitle">We encountered an error while processing your request</p>
+                </div>
+                
+                <div class="error-body">
+                    {% if error_message %}
+                    <div class="error-message">
+                        <strong>Error Details:</strong><br>
+                        {{ error_message }}
+                    </div>
+                    {% endif %}
+                    
+                    <p>Don't worry! This is usually a temporary issue. Here are some things you can try:</p>
+                    
+                    <div class="error-actions">
+                        <a href="/" class="action-button primary">
+                            <i class="fas fa-home"></i>
+                            Go to Dashboard
+                        </a>
+                        <a href="javascript:history.back()" class="action-button secondary">
+                            <i class="fas fa-arrow-left"></i>
+                            Go Back
+                        </a>
+                        <a href="javascript:location.reload()" class="action-button secondary">
+                            <i class="fas fa-refresh"></i>
+                            Retry
+                        </a>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="troubleshooting">
+                <h3>
+                    <i class="fas fa-tools"></i>
+                    Troubleshooting Tips
+                </h3>
+                <ul>
+                    <li>
+                        <i class="fas fa-check"></i>
+                        Ensure all sales agent services are running
+                    </li>
+                    <li>
+                        <i class="fas fa-check"></i>
+                        Check your internet connection
+                    </li>
+                    <li>
+                        <i class="fas fa-check"></i>
+                        Verify the GOOGLE_API_KEY is set correctly
+                    </li>
+                    <li>
+                        <i class="fas fa-check"></i>
+                        Try refreshing the page
+                    </li>
+                    <li>
+                        <i class="fas fa-check"></i>
+                        Clear your browser cache and cookies
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+    
+    <script>
+        // Auto-retry functionality
+        const urlParams = new URLSearchParams(window.location.search);
+        const autoRetry = urlParams.get('auto_retry');
+        
+        if (autoRetry === 'true') {
+            let countdown = 5;
+            const retryButton = document.querySelector('.action-button[href*="reload"]');
+            
+            if (retryButton) {
+                const originalText = retryButton.innerHTML;
+                
+                const updateCountdown = () => {
+                    retryButton.innerHTML = `<i class="fas fa-refresh"></i> Retrying in ${countdown}s`;
+                    countdown--;
+                    
+                    if (countdown < 0) {
+                        location.reload();
+                    } else {
+                        setTimeout(updateCountdown, 1000);
+                    }
+                };
+                
+                updateCountdown();
+            }
+        }
+        
+        // Add click tracking for troubleshooting
+        document.querySelectorAll('.troubleshooting li').forEach(item => {
+            item.addEventListener('click', function() {
+                this.style.backgroundColor = 'rgba(255, 255, 255, 0.1)';
+                setTimeout(() => {
+                    this.style.backgroundColor = '';
+                }, 200);
+            });
+        });
+    </script>
+</body>
+</html>

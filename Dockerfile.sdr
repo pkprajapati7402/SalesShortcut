@@ -1,0 +1,23 @@
+# Use a consistent Python version
+FROM python:3.13-slim
+
+# Set working directory to the root of the package
+WORKDIR /app/sales_shortcut
+
+# Copy ONLY the service-specific requirements file first for layer caching
+COPY sdr/requirements.txt /app/
+
+# Install dependencies
+RUN pip install --no-cache-dir -r /app/requirements.txt
+
+# Copy the root __init__.py to make sales_shortcut a package in the WORKDIR
+COPY __init__.py .
+
+# Copy the necessary source code directories
+COPY common/ ./common/
+COPY sdr/ ./sdr/
+
+# --- MODIFIED CMD INSTRUCTION ---
+# Directly run uvicorn on the app object inside your sdr.__main__ module.
+# Uvicorn will handle the host and port arguments from the environment.
+CMD ["uvicorn", "sdr.__main__:app", "--host", "0.0.0.0", "--port", "$PORT"]

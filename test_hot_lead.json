@@ -1,0 +1,21 @@
+{
+  "agent_type": "lead_manager",
+  "business_id": "hot_lead_-1234567890",
+  "status": "found",
+  "message": "Hot lead email from test@example.com",
+  "timestamp": "2024-06-21T10:30:00.000Z",
+  "data": {
+    "id": "hot_lead_-1234567890",
+    "name": "Test User",
+    "city": "New York",
+    "email": "test@example.com",
+    "phone": "+1-555-123-4567",
+    "sender_email": "test@example.com",
+    "sender_name": "Test User",
+    "subject": "Interested in your services",
+    "body_preview": "Hi, I saw your website and I am very interested in discussing a potential partnership...",
+    "received_date": "2024-06-21T10:25:00.000Z",
+    "message_id": "msg_test_123456",
+    "type": "hot_lead_email"
+  }
+}

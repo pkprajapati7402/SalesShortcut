@@ -1,0 +1,23 @@
+steps:
+  # Build the Docker image
+  - name: 'gcr.io/cloud-builders/docker'
+    args: [
+      'build',
+      '-f', 'gmail_pubsub_listener/Dockerfile',
+      '-t', '${_REGION}-docker.pkg.dev/$PROJECT_ID/${_REPO_NAME}/gmail-listener:latest',
+      '.'
+    ]
+
+  # Push the image to Artifact Registry
+  - name: 'gcr.io/cloud-builders/docker'
+    args: [
+      'push',
+      '${_REGION}-docker.pkg.dev/$PROJECT_ID/${_REPO_NAME}/gmail-listener:latest'
+    ]
+
+substitutions:
+  _REGION: 'us-central1'
+  _REPO_NAME: 'sales-shortcut'
+
+options:
+  machineType: 'E2_HIGHCPU_8'

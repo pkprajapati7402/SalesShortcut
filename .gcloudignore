@@ -1,0 +1,9 @@
+# .gcloudignore - files to ignore when uploading to Cloud Build context
+# Exclude Python caches and local environments, but include source, static, and templates
+__pycache__/
+*.py[cod]
+venv/
+.venv/
+.DS_Store
+.env
+*.log

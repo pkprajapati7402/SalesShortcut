@@ -1,0 +1,10 @@
+# Service-specific requirements
+-r lead_finder/requirements.txt
+-r lead_manager/requirements.txt
+-r sdr/requirements.txt
+-r ui_client/requirements.txt
+-r gmail_pubsub_listener/requirements.txt
+
+
+# Development/Testing requirements
+-r requirements-dev.txt

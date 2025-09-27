@@ -1,0 +1,33 @@
+# Use a consistent Python version
+FROM python:3.12-slim
+
+# Install OS dependencies needed to build numpy/pandas
+RUN apt-get update && apt-get install -y --no-install-recommends \
+    build-essential \
+    python3-dev \
+    gfortran \
+    libatlas-base-dev \
+    libopenblas-dev \
+    pkg-config \
+  && rm -rf /var/lib/apt/lists/*
+
+# Set working directory to the root of the package
+WORKDIR /app/sales_shortcut
+
+# Copy ONLY the service-specific requirements file first for layer caching
+# Copy it to the parent directory to keep it separate from package code
+COPY ui_client/requirements.txt /app/
+
+# Install dependencies from the parent directory (using the copied service-specific file)
+RUN pip install --no-cache-dir -r /app/requirements.txt
+
+# Copy the root __init__.py to make sales_shortcut a package in the WORKDIR
+COPY __init__.py .
+
+# Copy the necessary source code directories directly into the WORKDIR
+COPY common/ ./common/
+COPY ui_client/ ./ui_client/
+
+# Command to run the ui_client UI (FastAPI) using uvicorn
+# Use sh -c to ensure $PORT is expanded by the shell, fallback to 8000 if $PORT not set
+CMD ["sh", "-c", "uvicorn ui_client.main:app --host 0.0.0.0 --port ${PORT:-8000}"]

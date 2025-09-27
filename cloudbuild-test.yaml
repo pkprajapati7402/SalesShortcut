@@ -1,0 +1,16 @@
+steps:
+- name: 'gcr.io/cloud-builders/docker'
+  args: [
+      'build',
+      # 1. Changed the image tag from 'sdr' to 'test-service'
+      '-t', '${_REGION}-docker.pkg.dev/${PROJECT_ID}/${_REPO_NAME}/test-service:latest',
+      # 2. Changed the Dockerfile from 'Dockerfile.sdr' to 'Dockerfile.test'
+      '-f', 'Dockerfile.test',
+      '.'
+    ]
+# 3. Updated the output image name to match the new tag
+images:
+- '${_REGION}-docker.pkg.dev/${PROJECT_ID}/${_REPO_NAME}/test-service:latest'
+substitutions:
+  _REGION: 'us-central1'
+  _REPO_NAME: 'sales-shortcut'

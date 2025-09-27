@@ -1,0 +1,18 @@
+# Start from a slim Python base image
+FROM python:3.11-slim
+
+# Set the working directory
+WORKDIR /app
+
+# Install only the necessary dependencies for the test app
+RUN pip install "fastapi" "uvicorn[standard]"
+
+# Copy the test application file into the container
+COPY test_app.py .
+
+# Expose the port Cloud Run will use
+EXPOSE 8080
+
+# The command to run the application
+# Use the PORT environment variable that Cloud Run provides
+CMD ["sh", "-c", "uvicorn test_app:app --host 0.0.0.0 --port $PORT"]

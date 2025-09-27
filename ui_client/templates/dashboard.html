@@ -1,0 +1,400 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SalesShortcut Dashboard - {{ current_city or "Lead Generation" }}</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link href="/static/css/style.css" rel="stylesheet">
+    <link href="/static/css/dashboard.css" rel="stylesheet">
+</head>
+<body>
+    <div class="dashboard-container">
+        <!-- Header -->
+        <div class="dashboard-header">
+            <div class="header-left">
+                <div class="logo">
+                    <i class="fas fa-rocket"></i>
+                    <h1>SalesShortcut</h1>
+                </div>
+                {% if current_city %}
+                <div class="current-target">
+                    <i class="fas fa-map-marker-alt"></i>
+                    <span>{{ current_city }}</span>
+                </div>
+                {% endif %}
+            </div>
+            
+            <div class="header-right">
+                <div class="status-indicator">
+                    <div class="status-light {{ 'active' if is_running else 'idle' }}"></div>
+                    <span>{{ 'Processing' if is_running else 'Ready' }}</span>
+                </div>
+                
+                <button onclick="resetDashboard()" class="reset-btn">
+                    <i class="fas fa-refresh"></i>
+                    New Search
+                </button>
+                
+                <!-- Debug button for testing human input dialog -->
+                <button onclick="testHumanInputDialog()" style="margin-left: 10px; padding: 8px 12px; background: #f59e0b; color: white; border: none; border-radius: 6px; cursor: pointer; font-size: 12px;">
+                    <i class="fas fa-globe"></i>
+                    Test Human Input
+                </button>
+            </div>
+        </div>
+
+        <!-- Stats Overview -->
+        <div class="stats-bar">
+            <div class="stat-item">
+                <div class="stat-value" id="total-businesses">{{ businesses|length }}</div>
+                <div class="stat-label">Total Leads</div>
+            </div>
+            <div class="stat-item">
+                <div class="stat-value" id="engaged-count">0</div>
+                <div class="stat-label">Engaged</div>
+            </div>
+            <div class="stat-item">
+                <div class="stat-value" id="converting-count">0</div>
+                <div class="stat-label">Converting</div>
+            </div>
+            <div class="stat-item hot">
+                <div class="stat-value" id="meetings-count">0</div>
+                <div class="stat-label">Meetings Scheduled</div>
+            </div>
+        </div>
+
+        <!-- Agent Columns -->
+        <div class="agent-columns">
+            <!-- Lead Finder Column -->
+            <div class="agent-column" data-agent="lead_finder">
+                <div class="column-header">
+                    <div class="agent-icon">
+                        <i class="fas fa-search"></i>
+                    </div>
+                    <div class="agent-info">
+                        <h3>Lead Finder</h3>
+                        <p>Discovering potential businesses</p>
+                    </div>
+                    <div class="agent-status" id="lead-finder-status">
+                        <div class="status-indicator {{ 'active' if is_running else 'idle' }}"></div>
+                    </div>
+                </div>
+                
+                <div class="column-content" id="lead-finder-content">
+                    {% for business in businesses %}
+                        {% if business.status == 'found' %}
+                        <div class="business-card compact" data-business-id="{{ business.id }}">
+                            <div class="business-header">
+                                <h4>{{ business.name }}</h4>
+                                <span class="status-badge status-found">Found</span>
+                            </div>
+                            <div class="business-details">
+                                <div class="detail">
+                                    <i class="fas fa-map-marker-alt"></i>
+                                    <span>{{ business.city }}</span>
+                                </div>
+                                <div class="contact-row">
+                                    {% if business.phone %}
+                                    <div class="contact-item">
+                                        <i class="fas fa-phone"></i>
+                                        <span>{{ business.phone }}</span>
+                                    </div>
+                                    {% endif %}
+                                    {% if business.email %}
+                                    <div class="contact-item">
+                                        <i class="fas fa-envelope"></i>
+                                        <span>{{ business.email[:20] }}{% if business.email|length > 20 %}...{% endif %}</span>
+                                    </div>
+                                    {% endif %}
+                                </div>
+                            </div>
+                        </div>
+                        {% endif %}
+                    {% endfor %}
+                </div>
+            </div>
+
+            <!-- SDR Agent Column -->
+            <div class="agent-column" data-agent="sdr">
+                <div class="column-header">
+                    <div class="agent-icon">
+                        <i class="fas fa-user-tie"></i>
+                    </div>
+                    <div class="agent-info">
+                        <h3>SDR Agent</h3>
+                        <p>Engaging and qualifying prospects</p>
+                    </div>
+                    <div class="agent-status" id="sdr-status">
+                        <div class="status-indicator idle"></div>
+                    </div>
+                </div>
+                
+                <div class="column-content" id="sdr-content">
+                    {% for business in businesses %}
+                        {% if business.status in ['contacted', 'engaged', 'not_interested', 'no_response'] %}
+                        <div class="business-card compact" data-business-id="{{ business.id }}">
+                            <div class="business-header">
+                                <h4>{{ business.name }}</h4>
+                                <span class="status-badge status-{{ business.status.replace('_', '-') }}">
+                                    {% if business.status == 'contacted' %}Contacted
+                                    {% elif business.status == 'engaged' %}Engaged
+                                    {% elif business.status == 'not_interested' %}Not Interested
+                                    {% elif business.status == 'no_response' %}No Response
+                                    {% endif %}
+                                </span>
+                            </div>
+                            <div class="business-details">
+                                <div class="detail">
+                                    <i class="fas fa-map-marker-alt"></i>
+                                    <span>{{ business.city }}</span>
+                                </div>
+                                <div class="contact-row">
+                                    {% if business.phone %}
+                                    <div class="contact-item">
+                                        <i class="fas fa-phone"></i>
+                                        <span>{{ business.phone }}</span>
+                                    </div>
+                                    {% endif %}
+                                    {% if business.email %}
+                                    <div class="contact-item">
+                                        <i class="fas fa-envelope"></i>
+                                        <span>{{ business.email[:20] }}{% if business.email|length > 20 %}...{% endif %}</span>
+                                    </div>
+                                    {% endif %}
+                                </div>
+                                {% if business.notes %}
+                                <div class="compact-notes">
+                                    <i class="fas fa-sticky-note"></i>
+                                    <span>{{ business.notes[-1][:50] }}{% if business.notes[-1]|length > 50 %}...{% endif %}</span>
+                                </div>
+                                {% endif %}
+                            </div>
+                        </div>
+                        {% endif %}
+                    {% endfor %}
+                </div>
+            </div>
+
+            <!-- Lead Manager Column -->
+            <div class="agent-column" data-agent="lead_manager">
+                <div class="column-header" onclick="triggerLeadManager()" style="cursor: pointer;">
+                    <div class="agent-icon">
+                        <i class="fas fa-chart-line"></i>
+                    </div>
+                    <div class="agent-info">
+                        <h3>Lead Manager</h3>
+                        <p>Converting to hot leads</p>
+                    </div>
+                    <div class="agent-status" id="lead-manager-status">
+                        <div class="status-indicator idle"></div>
+                    </div>
+                </div>
+                
+                <div class="column-content" id="lead-manager-content">
+                    {% for business in businesses %}
+                        {% if business.status == 'converting' %}
+                        <div class="business-card compact hot-lead" data-business-id="{{ business.id }}">
+                            <div class="business-header">
+                                <div class="business-title">
+                                    <i class="fas fa-fire hot-icon"></i>
+                                    <h4>{{ business.name }}</h4>
+                                </div>
+                                <span class="status-badge status-converting">Converting</span>
+                            </div>
+                            <div class="business-details">
+                                <div class="detail">
+                                    <i class="fas fa-map-marker-alt"></i>
+                                    <span>{{ business.city }}</span>
+                                </div>
+                                <div class="contact-row">
+                                    {% if business.phone %}
+                                    <div class="contact-item">
+                                        <i class="fas fa-phone"></i>
+                                        <span>{{ business.phone }}</span>
+                                    </div>
+                                    {% endif %}
+                                    {% if business.email %}
+                                    <div class="contact-item">
+                                        <i class="fas fa-envelope"></i>
+                                        <span>{{ business.email[:20] }}{% if business.email|length > 20 %}...{% endif %}</span>
+                                    </div>
+                                    {% endif %}
+                                </div>
+                                {% if business.notes %}
+                                <div class="compact-notes">
+                                    <i class="fas fa-sticky-note"></i>
+                                    <span>{{ business.notes[-1][:50] }}{% if business.notes[-1]|length > 50 %}...{% endif %}</span>
+                                </div>
+                                {% endif %}
+                            </div>
+                        </div>
+                        {% endif %}
+                    {% endfor %}
+                </div>
+            </div>
+
+            <!-- Calendar Agent Column -->
+            <div class="agent-column calendar-column" data-agent="calendar">
+                <div class="column-header">
+                    <div class="agent-icon">
+                        <i class="fas fa-calendar-alt"></i>
+                    </div>
+                    <div class="agent-info">
+                        <h3>Calendar</h3>
+                        <p>Scheduled meetings</p>
+                    </div>
+                    <div class="agent-status" id="calendar-status">
+                        <div class="status-indicator idle"></div>
+                    </div>
+                </div>
+
+                <div class="column-content" id="meeting-scheduled-content">
+                    {% for business in businesses %}
+                        {% if business.status == 'meeting_scheduled' %}
+                        <div class="business-card compact meeting-card" data-business-id="{{ business.id }}">
+                            <div class="business-header">
+                                <div class="business-title">
+                                    <i class="fas fa-handshake meeting-icon"></i>
+                                    <h4>{{ business.name }}</h4>
+                                </div>
+                                <span class="status-badge status-meeting-scheduled">Meeting Scheduled</span>
+                            </div>
+                            <div class="business-details">
+                                <div class="detail">
+                                    <i class="fas fa-calendar-alt"></i>
+                                    <span>{{ business.updated_at|format_datetime }}</span>
+                                </div>
+                                {% if business.notes %}
+                                <div class="compact-notes">
+                                    <i class="fas fa-sticky-note"></i>
+                                    <span>{{ business.notes[-1][:50] }}{% if business.notes[-1]|length > 50 %}...{% endif %}</span>
+                                </div>
+                                {% endif %}
+                            </div>
+                        </div>
+                        {% endif %}
+                    {% endfor %}
+                </div>
+            </div>
+
+        </div>
+
+        <!-- Activity Log -->
+        <div class="activity-log">
+            <div class="log-header">
+                <h3><i class="fas fa-history"></i> Recent Activity</h3>
+                <button onclick="toggleLog()" class="toggle-log">
+                    <i class="fas fa-chevron-up"></i>
+                </button>
+            </div>
+            <div class="log-content" id="activity-log">
+                {% for update in agent_updates %}
+                <div class="log-entry">
+                    <span class="log-time">{{ update.timestamp|format_datetime }}</span>
+                    <span class="log-agent">{{ update.agent_type|title }}</span>
+                    <span class="log-message">{{ update.message }}</span>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+
+    <!-- Loading Overlay -->
+    <div class="loading-overlay" id="loading-overlay" style="display: none;">
+        <div class="loading-content">
+            <div class="spinner"></div>
+            <h3>Processing leads...</h3>
+            <p>Our AI agents are working hard to find and qualify your prospects.</p>
+        </div>
+    </div>
+
+    <!-- SDR Dialog -->
+    <div class="modal-overlay hidden" id="sdr-dialog-overlay" onclick="closeSdrDialog()">
+        <div class="modal-dialog" onclick="event.stopPropagation()">
+            <div class="modal-header">
+                <h3><i class="fas fa-user-tie"></i> Send to SDR Agent</h3>
+                <button class="modal-close" onclick="closeSdrDialog()">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <div class="modal-content">
+                <div class="business-preview" id="business-preview">
+                    <!-- Business details will be populated here -->
+                </div>
+                <div class="modal-message">
+                    <p>Do you want to send this lead to the SDR agent for engagement and qualification?</p>
+                    <p class="modal-subtitle">The SDR agent will:</p>
+                    <ul>
+                        <li>Contact the business via phone or email</li>
+                        <li>Qualify the lead based on your criteria</li>
+                        <li>Update you on the engagement status</li>
+                    </ul>
+                </div>
+                <div class="phone-input-section">
+                    <label for="sdr-phone-input">Phone Number <span class="required-mark">*</span></label>
+                    <p class="field-description">Enter the phone number where you want to be reached for the call. This will override the business's phone number for outreach.</p>
+                    <div class="phone-input-wrapper">
+                        <input type="tel" id="sdr-phone-input" placeholder="(555) 123-4567" required>
+                        <span id="phone-validation-icon"></span>
+                    </div>
+                    <div id="phone-validation-status" class="validation-status"></div>
+                </div>
+            </div>
+            <div class="modal-actions">
+                <button class="btn-primary" id="confirm-sdr-btn" onclick="confirmSendToSdr()" disabled>
+                    <i class="fas fa-paper-plane"></i>
+                    Enter Phone Number
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Human Input Dialog -->
+    <div class="modal-overlay hidden" id="human-input-dialog-overlay" onclick="closeHumanInputDialog()">
+        <div class="modal-dialog human-input-dialog" onclick="event.stopPropagation()">
+            <div class="modal-header">
+                <h3><i class="fas fa-globe"></i> SDR Agent Requesting Website Creation</h3>
+                <button class="modal-close" onclick="closeHumanInputDialog()">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <div class="modal-content">
+                <div class="human-input-message">
+                    <p><strong>SDR agent requesting website creation</strong></p>
+                    <div class="prompt-container">
+                        <div class="prompt-header">
+                            <span class="prompt-label">Website creation prompt:</span>
+                            <button class="copy-prompt-btn" onclick="copyPromptToClipboard()" title="Copy prompt to clipboard">
+                                <i class="fas fa-copy"></i>
+                            </button>
+                        </div>
+                        <textarea id="human-input-prompt" readonly class="prompt-display"></textarea>
+                    </div>
+                    <div class="redirect-section">
+                        <button class="btn-redirect" onclick="openFirebaseStudio()">
+                            <i class="fas fa-external-link-alt"></i>
+                            Firebase Studio
+                        </button>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-actions">
+                <button class="btn-secondary" onclick="closeHumanInputDialog()">
+                    <i class="fas fa-times"></i>
+                    Cancel
+                </button>
+                <div class="url-input-container">
+                    <input type="url" id="website-url-input" placeholder="Enter website URL here..." class="url-input">
+                    <button class="btn-primary" id="submit-website-url-btn" onclick="submitWebsiteUrl()">
+                        <i class="fas fa-check"></i>
+                        Submit URL
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="/static/js/dashboard.js"></script>
+</body>
+</html>

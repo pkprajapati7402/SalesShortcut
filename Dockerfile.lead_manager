@@ -1,0 +1,23 @@
+# Use a consistent Python version
+FROM python:3.13-slim
+
+# Set working directory to the root of the package
+WORKDIR /app/sales_shortcut
+
+# Copy ONLY the service-specific requirements file first for layer caching
+# Copy it to the parent directory to keep it separate from package code
+COPY lead_manager/requirements.txt /app/
+
+# Install dependencies from the parent directory (using the copied service-specific file)
+RUN pip install --no-cache-dir -r /app/requirements.txt
+
+# Copy the root __init__.py to make sales_shortcut a package in the WORKDIR
+COPY __init__.py .
+
+# Copy the necessary source code directories directly into the WORKDIR
+COPY common/ ./common/
+COPY lead_manager/ ./lead_manager/
+
+# Command to run the lead_manager A2A server using module execution
+# Use sh -c to ensure $PORT is expanded by the shell
+CMD ["sh", "-c", "python -m lead_manager --host 0.0.0.0 --port $PORT"]
