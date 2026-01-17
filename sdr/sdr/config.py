@@ -9,8 +9,9 @@ from dotenv import load_dotenv
 load_dotenv()
 
 # Model configuration
+# Using cost-effective models - gemini-2.0-flash-lite is free tier
 MODEL = os.getenv("MODEL", "gemini-2.0-flash-lite")
-MODEL_THINK = os.getenv("MODEL_THINK", "gemini-2.5-flash-preview-05-20")
+MODEL_THINK = os.getenv("MODEL_THINK", "gemini-2.0-flash-thinking-exp")
 TEMPERATURE = float(os.getenv("TEMPERATURE", "0.2"))
 TOP_P = float(os.getenv("TOP_P", "0.95"))
 TOP_K = int(os.getenv("TOP_K", "40"))
@@ -55,3 +56,8 @@ TEST_MODE = os.getenv("TEST", "false").lower() == "true"
 
 # UI service configuration
 UI_SERVICE_ENABLED = os.getenv("UI_SERVICE_ENABLED", "true").lower() == "true"
+
+# OpenRouter configuration (for OpenAI/Anthropic via OpenRouter)
+OPENROUTER_API_KEY = os.getenv("OPENROUTER_API_KEY", "")
+OPENAI_API_BASE = os.getenv("OPENAI_API_BASE", "https://openrouter.ai/api/v1")
+ANTHROPIC_API_BASE = os.getenv("ANTHROPIC_API_BASE", "https://openrouter.ai/api/v1")

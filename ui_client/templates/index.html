@@ -3,145 +3,200 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SalesShortcut - Lead Generation Platform</title>
+    <title>SalesShortcut - AI-Powered Lead Generation Platform</title>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
     <link href="/static/css/style.css" rel="stylesheet">
 </head>
 <body>
+    <!-- Background Decorations -->
+    <div class="bg-decoration"></div>
+    <div class="bg-decoration-2"></div>
+    
     <div class="container">
-        <div class="header">
-            <div class="logo">
-                <i class="fas fa-rocket"></i>
-                <h1>SalesShortcut</h1>
+        <!-- Hero Section -->
+        <div class="hero-section">
+            <div class="logo-container">
+                <div class="logo-circle">
+                    <i class="fas fa-rocket"></i>
+                </div>
+                <h1 class="brand-name">SalesShortcut</h1>
             </div>
-            <p class="subtitle">AI-Powered Lead Generation & Management Platform</p>
-            <div class="header-actions">
-                <button onclick="window.open('/architecture_diagram', '_blank')" class="architecture-btn">
-                    <i class="fas fa-project-diagram"></i>
-                    <span class="btn-text">View System Architecture</span>
-                </button>
-            </div>
-        </div>
-
-        <div class="main-card">
-            <div class="card-header">
-                <i class="fas fa-map-marker-alt"></i>
-                <h2>Start Lead Generation</h2>
-            </div>
+            <h2 class="hero-title">Transform Your Sales Pipeline with AI</h2>
+            <p class="hero-subtitle">The only lead generation platform you'll ever need. Powered by advanced AI agents that work 24/7 to discover, qualify, and convert prospects into customers.</p>
             
-            <div class="card-body">
-                <p class="description">
-                    Enter a city name to begin the automated lead generation process. 
-                    Our AI agents will find, contact, and qualify potential customers in your target market.
-                </p>
-
-                <form action="/start_lead_finding" method="post" class="search-form">
-                    <div class="input-group">
-                        <label for="city">Target City</label>
-                        <div class="input-container">
-                            <i class="fas fa-city input-icon"></i>
-                            <input 
-                                type="text" 
-                                id="city" 
-                                name="city" 
-                                placeholder="e.g., San Francisco, New York, Austin"
-                                required
-                                maxlength="100"
-                                autocomplete="off"
-                            >
-                        </div>
-                    </div>
-                    
-                    <button type="submit" class="run-button">
-                        <i class="fas fa-play"></i>
-                        Run Agents
-                    </button>
-                </form>
-
-                <div class="process-info">
-                    <h3><i class="fas fa-cogs"></i> What happens next?</h3>
-                    <div class="process-steps">
-                        <div class="step">
-                            <div class="step-number">1</div>
-                            <div class="step-content">
-                                <h4>Lead Finder</h4>
-                                <p>Discovers potential businesses in your target city</p>
-                            </div>
-                        </div>
-                        
-                        <div class="step">
-                            <div class="step-number">2</div>
-                            <div class="step-content">
-                                <h4>SDR Agent</h4>
-                                <p>Engages with prospects and qualifies their interest</p>
-                            </div>
-                        </div>
-                        
-                        <div class="step">
-                            <div class="step-number">3</div>
-                            <div class="step-content">
-                                <h4>Lead Manager</h4>
-                                <p>Converts qualified leads into sales opportunities</p>
-                            </div>
-                        </div>
-                        
-                        <div class="step">
-                            <div class="step-number">4</div>
-                            <div class="step-content">
-                                <h4>Calendar Agent</h4>
-                                <p>Schedules meetings with hot prospects</p>
-                            </div>
-                        </div>
-                    </div>
+            <!-- Stats Bar -->
+            <div class="stats-bar">
+                <div class="stat-item">
+                    <div class="stat-number">100%</div>
+                    <div class="stat-label">Automated</div>
+                </div>
+                <div class="stat-divider"></div>
+                <div class="stat-item">
+                    <div class="stat-number">4</div>
+                    <div class="stat-label">AI Agents</div>
+                </div>
+                <div class="stat-divider"></div>
+                <div class="stat-item">
+                    <div class="stat-number">24/7</div>
+                    <div class="stat-label">Active</div>
                 </div>
             </div>
         </div>
 
-        <div class="features">
-            <div class="feature">
-                <i class="fas fa-bolt"></i>
-                <h3>Automated</h3>
-                <p>Fully automated lead generation pipeline</p>
+        <!-- Main Action Card -->
+        <div class="action-card">
+            <div class="card-glow"></div>
+            <div class="action-header">
+                <div class="pulse-dot"></div>
+                <h3>Launch Your Campaign</h3>
             </div>
-            <div class="feature">
-                <i class="fas fa-chart-line"></i>
-                <h3>Real-time</h3>
-                <p>Live updates and progress tracking</p>
+            
+            <form action="/start_lead_finding" method="post" class="launch-form">
+                <div class="form-content">
+                    <label for="city" class="form-label">
+                        <i class="fas fa-location-dot"></i>
+                        Enter Your Target Market
+                    </label>
+                    <div class="input-wrapper">
+                        <input 
+                            type="text" 
+                            id="city" 
+                            name="city" 
+                            placeholder="San Francisco, New York, Austin..."
+                            required
+                            maxlength="100"
+                            autocomplete="off"
+                            class="city-input"
+                        >
+                        <div class="input-underline"></div>
+                    </div>
+                    
+                    <button type="submit" class="launch-button">
+                        <span class="button-content">
+                            <i class="fas fa-rocket-launch"></i>
+                            <span>Start AI Campaign</span>
+                        </span>
+                        <div class="button-shimmer"></div>
+                    </button>
+                </div>
+            </form>
+        </div>
+
+        <!-- How It Works Section -->
+        <div class="workflow-section">
+            <h3 class="section-title">
+                <i class="fas fa-wand-magic-sparkles"></i>
+                Your AI-Powered Sales Team
+            </h3>
+            
+            <div class="workflow-grid">
+                <div class="workflow-card">
+                    <div class="card-number">01</div>
+                    <div class="card-icon-wrapper">
+                        <i class="fas fa-search-location"></i>
+                    </div>
+                    <h4>Lead Discovery</h4>
+                    <p>AI scans and identifies high-potential businesses in your target market using advanced algorithms</p>
+                    <div class="card-badge">Lead Finder</div>
+                </div>
+
+                <div class="workflow-arrow">
+                    <i class="fas fa-arrow-right"></i>
+                </div>
+
+                <div class="workflow-card">
+                    <div class="card-number">02</div>
+                    <div class="card-icon-wrapper">
+                        <i class="fas fa-user-check"></i>
+                    </div>
+                    <h4>Smart Engagement</h4>
+                    <p>SDR agent initiates contact, qualifies interest, and determines the best approach for each prospect</p>
+                    <div class="card-badge">SDR Agent</div>
+                </div>
+
+                <div class="workflow-arrow">
+                    <i class="fas fa-arrow-right"></i>
+                </div>
+
+                <div class="workflow-card">
+                    <div class="card-number">03</div>
+                    <div class="card-icon-wrapper">
+                        <i class="fas fa-trophy"></i>
+                    </div>
+                    <h4>Lead Conversion</h4>
+                    <p>Analyzes responses, prioritizes hot leads, and moves qualified prospects through your pipeline</p>
+                    <div class="card-badge">Lead Manager</div>
+                </div>
+
+                <div class="workflow-arrow">
+                    <i class="fas fa-arrow-right"></i>
+                </div>
+
+                <div class="workflow-card">
+                    <div class="card-number">04</div>
+                    <div class="card-icon-wrapper">
+                        <i class="fas fa-calendar-check"></i>
+                    </div>
+                    <h4>Meeting Booked</h4>
+                    <p>Automatically schedules meetings with interested prospects directly in your calendar</p>
+                    <div class="card-badge">Calendar Agent</div>
+                </div>
             </div>
-            <div class="feature">
-                <i class="fas fa-target"></i>
-                <h3>Targeted</h3>
-                <p>City-specific lead generation</p>
+        </div>
+
+        <!-- Features Grid -->
+        <div class="features-grid">
+            <div class="feature-card">
+                <div class="feature-icon">
+                    <i class="fas fa-brain"></i>
+                </div>
+                <h4>AI-Powered Intelligence</h4>
+                <p>Advanced machine learning models continuously optimize your lead generation strategy</p>
             </div>
+
+            <div class="feature-card">
+                <div class="feature-icon">
+                    <i class="fas fa-chart-line"></i>
+                </div>
+                <h4>Real-Time Analytics</h4>
+                <p>Live dashboard with insights, metrics, and performance tracking at your fingertips</p>
+            </div>
+
+            <div class="feature-card">
+                <div class="feature-icon">
+                    <i class="fas fa-shield-halved"></i>
+                </div>
+                <h4>Enterprise Security</h4>
+                <p>Bank-level encryption and compliance with industry standards keeps your data safe</p>
+            </div>
+        </div>
+
+        <!-- CTA Footer -->
+        <div class="footer-cta">
+            <button onclick="window.open('/architecture_diagram', '_blank')" class="secondary-button">
+                <i class="fas fa-diagram-project"></i>
+                View System Architecture
+            </button>
         </div>
     </div>
 
     <script>
-        // Add some interactive feedback
-        document.querySelector('.search-form').addEventListener('submit', function(e) {
-            const button = document.querySelector('.run-button');
-            const originalText = button.innerHTML;
+        // Form handling
+        document.querySelector('.launch-form').addEventListener('submit', function(e) {
+            const button = document.querySelector('.launch-button');
+            const buttonContent = button.querySelector('.button-content');
             
-            button.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Starting Agents...';
+            buttonContent.innerHTML = '<i class="fas fa-spinner fa-spin"></i> <span>Starting Agents...</span>';
             button.disabled = true;
-            
-            // Allow form to submit normally, but provide immediate feedback
-            setTimeout(() => {
-                if (button) {
-                    button.innerHTML = originalText;
-                    button.disabled = false;
-                }
-            }, 2000);
         });
 
-        // Auto-focus on input
+        // Auto-focus
         document.addEventListener('DOMContentLoaded', function() {
             document.getElementById('city').focus();
         });
 
-        // Input validation and formatting
+        // Input formatting
         document.getElementById('city').addEventListener('input', function(e) {
-            // Capitalize first letter of each word
             const words = e.target.value.split(' ');
             const capitalizedWords = words.map(word => 
                 word.charAt(0).toUpperCase() + word.slice(1).toLowerCase()

@@ -2,6 +2,8 @@
 
 A comprehensive AI-powered Sales Development Representative (SDR) system built with multi-agent architecture for automated lead generation, research, proposal generation, and outreach.
 
+> **✨ Powered by [On-demand.io](https://ondemand.io)** - Leveraging specialized AI agents for lead enrichment, qualification, and personalized outreach at scale.
+
 ## 🎯 Project Overview
 
 SalesShortcut is a sales automation and engagement platform that **finds, creates, and converts leads** through intelligent AI agents. The system automatically discovers potential business leads, researches their needs, creates personalized proposals, and manages outreach campaigns including phone calls and email communication.
@@ -51,12 +53,16 @@ graph TD
 - **Competitor research** - Analyze market position and opportunities
 - **Review analysis** - Extract insights from customer feedback
 - **Website assessment** - Identify digital presence gaps
+- **🆕 On-demand.io Lead Enrichment** - Real-time company data, tech stack, and decision maker info
+- **🆕 On-demand.io Lead Qualification** - Intelligent ICP scoring and buying signal detection
 
 ### Personalized Outreach
 - **Custom proposal generation** - AI-crafted proposals based on research findings
 - **Multi-channel communication** - Phone calls via ElevenLabs + email outreach
 - **Professional voice calls** - Natural AI voice conversations with prospects
 - **Email automation** - SMTP-based email delivery with personalized content
+- **🆕 On-demand.io Email Composer** - Hyper-personalized outreach emails with higher response rates
+- **🆕 On-demand.io Call Scripts** - Dynamic phone scripts with objection handling
 
 ### Lead Management
 - **Automated follow-up** - Track engagement and schedule next actions
@@ -68,6 +74,7 @@ graph TD
 
 - **Framework**: Python with FastAPI and Google ADK Agents
 - **AI Models**: Gemini 2.0 Flash Lite (configurable)
+- **Agent Orchestration**: On-demand.io for specialized agents (enrichment, qualification, content generation)
 - **Voice**: ElevenLabs API for natural phone conversations
 - **Database**: Google BigQuery for data storage and analytics
 - **APIs**: Google Maps, Google Search, SMTP for email
@@ -82,6 +89,7 @@ graph TD
   - Google API Key (for Gemini LLM)
   - Google Maps API Key
   - ElevenLabs API Key (for voice calls)
+  - **On-demand.io API Key** (for agent orchestration)
   - Optional: OpenAI, Anthropic keys
 
 ## 🚀 Quick Start
@@ -104,6 +112,10 @@ Update `.env` with your API credentials:
 GOOGLE_API_KEY=your_google_api_key_here
 GOOGLE_MAPS_API_KEY=your_maps_api_key_here
 GOOGLE_CLOUD_PROJECT=your_gcp_project_id_here
+
+# On-demand.io Configuration (for AI agent orchestration)
+ONDEMAND_API_KEY=od_sk_live_your_key_here
+ONDEMAND_WORKSPACE_ID=ws_salesshortcut_prod_2026
 
 # For Voice Calls
 ELEVENLABS_API_KEY=your_elevenlabs_key_here
@@ -175,6 +187,7 @@ Each service has its own detailed README with specific installation and configur
 - **📋 [Lead Manager](./lead_manager/README.md)** - Lead qualification and meeting scheduling
 - **🖥️ [UI Client](./ui_client/README.md)** - Web dashboard and monitoring
 - **📧 [Gmail PubSub Service](./gmail_pubsub_listener/README.md)** - Email response handling
+- **🤖 [On-demand.io Integration](./ONDEMAND_INTEGRATION.md)** - AI agent orchestration setup
 
 ## 🔧 Environment Variables
 
@@ -185,6 +198,8 @@ Each service has its own detailed README with specific installation and configur
 | `GOOGLE_API_KEY` | Google API key for Gemini LLM | Yes |
 | `GOOGLE_MAPS_API_KEY` | Google Maps API key | Yes |
 | `GOOGLE_CLOUD_PROJECT` | GCP project ID for BigQuery | Yes |
+| `ONDEMAND_API_KEY` | On-demand.io API key for agent orchestration | Yes |
+| `ONDEMAND_WORKSPACE_ID` | On-demand.io workspace identifier | Yes |
 | `ELEVENLABS_API_KEY` | ElevenLabs API key for voice calls | Optional |
 | `EMAIL_USERNAME` | SMTP email username | Optional |
 | `EMAIL_PASSWORD` | SMTP email password | Optional |

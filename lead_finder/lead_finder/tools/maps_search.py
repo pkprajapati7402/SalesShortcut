@@ -88,37 +88,76 @@ class GoogleMapsClient:
         return hours.get('open_now', False) if hours else False
 
     def _get_mock_results(self, city: str, business_type: Optional[str] = None) -> List[Dict[str, Any]]:
-        """Generate mock results for testing."""
+        """Generate realistic Indian mock results for testing with more leads."""
         logger.warning(f"RETURNING MOCK DATA for {city}! Client status: {self.client}, API key checked: {self._api_key_checked}")
-        mock_businesses = [
-            {
-                "place_id": f"mock_{city.lower()}_1",
-                "name": f"Mock Business 1 - {city}",
-                "address": f"123 Main St, {city}",
-                "phone": "555-0123",
-                "website": "",  # No website
-                "rating": 4.5,
-                "total_ratings": 100,
-                "category": business_type or "General Business",
-                "price_level": 2,
-                "is_open": True,
-                "location": {"lat": 40.7128, "lng": -74.0060}
-            },
-            {
-                "place_id": f"mock_{city.lower()}_2",
-                "name": f"Mock Business 2 - {city}",
-                "address": f"456 Oak Ave, {city}",
-                "phone": "555-0456",
-                "website": "",  # No website
-                "rating": 4.0,
-                "total_ratings": 75,
-                "category": business_type or "General Business",
-                "price_level": 1,
-                "is_open": True,
-                "location": {"lat": 40.7589, "lng": -73.9851}
-            }
+        
+        # Extended realistic Indian business data (35+ businesses)
+        indian_businesses = [
+            # Restaurants & Food
+            {"place_id": f"mock_{city.lower()}_1", "name": "Shree Krishna Restaurant", "address": f"Shop 12, MG Road, {city}, India", "phone": "+91-9876543210", "website": "", "rating": 4.5, "total_ratings": 287, "category": business_type or "Restaurant", "price_level": 2, "is_open": True, "location": {"lat": 28.6139, "lng": 77.2090}},
+            {"place_id": f"mock_{city.lower()}_2", "name": "Sharma Sweets & Namkeen", "address": f"17, Bazaar Street, {city}, India", "phone": "+91-9654321098", "website": "", "rating": 4.6, "total_ratings": 512, "category": business_type or "Sweet Shop", "price_level": 1, "is_open": True, "location": {"lat": 28.6178, "lng": 77.2056}},
+            {"place_id": f"mock_{city.lower()}_3", "name": "Punjabi Dhaba", "address": f"Highway Junction, {city}, India", "phone": "+91-9823456712", "website": "", "rating": 4.3, "total_ratings": 198, "category": business_type or "Restaurant", "price_level": 1, "is_open": True, "location": {"lat": 28.6201, "lng": 77.2145}},
+            {"place_id": f"mock_{city.lower()}_4", "name": "South Indian Cafe", "address": f"22, Temple Street, {city}, India", "phone": "+91-9765432187", "website": "", "rating": 4.4, "total_ratings": 345, "category": business_type or "Cafe", "price_level": 1, "is_open": True, "location": {"lat": 28.6256, "lng": 77.2123}},
+            {"place_id": f"mock_{city.lower()}_5", "name": "Biryani House", "address": f"Old City, {city}, India", "phone": "+91-9887654321", "website": "", "rating": 4.7, "total_ratings": 623, "category": business_type or "Restaurant", "price_level": 2, "is_open": True, "location": {"lat": 28.6189, "lng": 77.2078}},
+            
+            # Retail & Shopping
+            {"place_id": f"mock_{city.lower()}_6", "name": "Raj Electronics & Mobiles", "address": f"45, Gandhi Chowk, {city}, India", "phone": "+91-9845678901", "website": "", "rating": 4.2, "total_ratings": 156, "category": business_type or "Electronics Store", "price_level": 2, "is_open": True, "location": {"lat": 28.6198, "lng": 77.2135}},
+            {"place_id": f"mock_{city.lower()}_7", "name": "Patel Textile Showroom", "address": f"56-58, Cloth Market, {city}, India", "phone": "+91-9876549876", "website": "", "rating": 3.9, "total_ratings": 145, "category": business_type or "Clothing Store", "price_level": 2, "is_open": True, "location": {"lat": 28.6245, "lng": 77.2112}},
+            {"place_id": f"mock_{city.lower()}_8", "name": "Kumar Hardware & Sanitary", "address": f"Ground Floor, Market Complex, {city}, India", "phone": "+91-9823456789", "website": "", "rating": 4.4, "total_ratings": 267, "category": business_type or "Hardware Store", "price_level": 2, "is_open": True, "location": {"lat": 28.6156, "lng": 77.2189}},
+            {"place_id": f"mock_{city.lower()}_9", "name": "Fashion Plaza", "address": f"Central Market, {city}, India", "phone": "+91-9712345678", "website": "", "rating": 4.0, "total_ratings": 234, "category": business_type or "Clothing Store", "price_level": 2, "is_open": True, "location": {"lat": 28.6223, "lng": 77.2167}},
+            {"place_id": f"mock_{city.lower()}_10", "name": "Jain Book Depot", "address": f"Library Road, {city}, India", "phone": "+91-9834567890", "website": "", "rating": 4.5, "total_ratings": 187, "category": business_type or "Book Store", "price_level": 1, "is_open": True, "location": {"lat": 28.6278, "lng": 77.2189}},
+            
+            # Healthcare & Wellness
+            {"place_id": f"mock_{city.lower()}_11", "name": "Gupta Medical Store", "address": f"Near City Hospital, Station Road, {city}, India", "phone": "+91-9123456789", "website": "", "rating": 4.7, "total_ratings": 423, "category": business_type or "Pharmacy", "price_level": 1, "is_open": True, "location": {"lat": 28.6254, "lng": 77.2167}},
+            {"place_id": f"mock_{city.lower()}_12", "name": "Lakshmi Beauty Parlour", "address": f"1st Floor, Nehru Market, {city}, India", "phone": "+91-9876501234", "website": "", "rating": 4.3, "total_ratings": 234, "category": business_type or "Beauty Salon", "price_level": 1, "is_open": True, "location": {"lat": 28.6321, "lng": 77.2201}},
+            {"place_id": f"mock_{city.lower()}_13", "name": "Modern Gym & Fitness Center", "address": f"2nd Floor, Mall Road, {city}, India", "phone": "+91-9912345678", "website": "", "rating": 4.1, "total_ratings": 178, "category": business_type or "Gym", "price_level": 2, "is_open": True, "location": {"lat": 28.6289, "lng": 77.2178}},
+            {"place_id": f"mock_{city.lower()}_14", "name": "Ayurvedic Clinic", "address": f"Green Park, {city}, India", "phone": "+91-9898765432", "website": "", "rating": 4.6, "total_ratings": 312, "category": business_type or "Healthcare", "price_level": 2, "is_open": True, "location": {"lat": 28.6267, "lng": 77.2145}},
+            {"place_id": f"mock_{city.lower()}_15", "name": "Yoga & Wellness Center", "address": f"Park View, {city}, India", "phone": "+91-9767890123", "website": "", "rating": 4.4, "total_ratings": 198, "category": business_type or "Yoga Studio", "price_level": 1, "is_open": True, "location": {"lat": 28.6298, "lng": 77.2123}},
+            
+            # Services
+            {"place_id": f"mock_{city.lower()}_16", "name": "Singh Auto Repair", "address": f"Plot 23, Industrial Area, {city}, India", "phone": "+91-9988776655", "website": "", "rating": 4.0, "total_ratings": 89, "category": business_type or "Car Repair", "price_level": 2, "is_open": True, "location": {"lat": 28.6081, "lng": 77.2298}},
+            {"place_id": f"mock_{city.lower()}_17", "name": "Verma Cyber Cafe & Printing", "address": f"Near Bus Stand, Main Road, {city}, India", "phone": "+91-9765432109", "website": "", "rating": 3.8, "total_ratings": 92, "category": business_type or "Internet Cafe", "price_level": 1, "is_open": True, "location": {"lat": 28.6312, "lng": 77.2234}},
+            {"place_id": f"mock_{city.lower()}_18", "name": "Quick Laundry Service", "address": f"Behind Market, {city}, India", "phone": "+91-9678901234", "website": "", "rating": 4.2, "total_ratings": 145, "category": business_type or "Laundry", "price_level": 1, "is_open": True, "location": {"lat": 28.6234, "lng": 77.2167}},
+            {"place_id": f"mock_{city.lower()}_19", "name": "Professional Tailoring", "address": f"Shop 34, Shopping Complex, {city}, India", "phone": "+91-9845123456", "website": "", "rating": 4.5, "total_ratings": 178, "category": business_type or "Tailor", "price_level": 1, "is_open": True, "location": {"lat": 28.6189, "lng": 77.2134}},
+            {"place_id": f"mock_{city.lower()}_20", "name": "Mobile Repair Center", "address": f"Electronic Market, {city}, India", "phone": "+91-9712348765", "website": "", "rating": 4.1, "total_ratings": 267, "category": business_type or "Repair Shop", "price_level": 1, "is_open": True, "location": {"lat": 28.6201, "lng": 77.2156}},
+            
+            # Education & Training
+            {"place_id": f"mock_{city.lower()}_21", "name": "Smart Coaching Classes", "address": f"Upper Floor, School Road, {city}, India", "phone": "+91-9834567123", "website": "", "rating": 4.3, "total_ratings": 289, "category": business_type or "Coaching Center", "price_level": 2, "is_open": True, "location": {"lat": 28.6278, "lng": 77.2201}},
+            {"place_id": f"mock_{city.lower()}_22", "name": "English Speaking Institute", "address": f"2nd Floor, Main Market, {city}, India", "phone": "+91-9923456789", "website": "", "rating": 4.0, "total_ratings": 156, "category": business_type or "Training Center", "price_level": 2, "is_open": True, "location": {"lat": 28.6245, "lng": 77.2178}},
+            {"place_id": f"mock_{city.lower()}_23", "name": "Computer Training Academy", "address": f"IT Park, {city}, India", "phone": "+91-9798765432", "website": "", "rating": 4.4, "total_ratings": 312, "category": business_type or "Computer Institute", "price_level": 2, "is_open": True, "location": {"lat": 28.6289, "lng": 77.2234}},
+            
+            # Home Services
+            {"place_id": f"mock_{city.lower()}_24", "name": "Mehta Plumbing Services", "address": f"Residential Area, {city}, India", "phone": "+91-9667788990", "website": "", "rating": 4.2, "total_ratings": 123, "category": business_type or "Plumber", "price_level": 1, "is_open": True, "location": {"lat": 28.6167, "lng": 77.2212}},
+            {"place_id": f"mock_{city.lower()}_25", "name": "Electrician Services", "address": f"Near Power House, {city}, India", "phone": "+91-9778899001", "website": "", "rating": 4.1, "total_ratings": 98, "category": business_type or "Electrician", "price_level": 1, "is_open": True, "location": {"lat": 28.6198, "lng": 77.2189}},
+            {"place_id": f"mock_{city.lower()}_26", "name": "Home Cleaning Services", "address": f"Sector 5, {city}, India", "phone": "+91-9889900112", "website": "", "rating": 4.3, "total_ratings": 187, "category": business_type or "Cleaning Service", "price_level": 2, "is_open": True, "location": {"lat": 28.6223, "lng": 77.2145}},
+            
+            # Food & Grocery
+            {"place_id": f"mock_{city.lower()}_27", "name": "Fresh Fruits & Vegetables", "address": f"Vegetable Market, {city}, India", "phone": "+91-9756789012", "website": "", "rating": 4.0, "total_ratings": 234, "category": business_type or "Grocery", "price_level": 1, "is_open": True, "location": {"lat": 28.6212, "lng": 77.2101}},
+            {"place_id": f"mock_{city.lower()}_28", "name": "Dairy Products Shop", "address": f"Milk Market, {city}, India", "phone": "+91-9645678901", "website": "", "rating": 4.5, "total_ratings": 345, "category": business_type or "Dairy", "price_level": 1, "is_open": True, "location": {"lat": 28.6234, "lng": 77.2123}},
+            {"place_id": f"mock_{city.lower()}_29", "name": "Organic Food Store", "address": f"Health Plaza, {city}, India", "phone": "+91-9534567890", "website": "", "rating": 4.6, "total_ratings": 278, "category": business_type or "Organic Store", "price_level": 2, "is_open": True, "location": {"lat": 28.6267, "lng": 77.2167}},
+            
+            # Entertainment & Recreation
+            {"place_id": f"mock_{city.lower()}_30", "name": "Gaming Zone", "address": f"Mall Complex, {city}, India", "phone": "+91-9423456789", "website": "", "rating": 4.2, "total_ratings": 456, "category": business_type or "Gaming Center", "price_level": 2, "is_open": True, "location": {"lat": 28.6289, "lng": 77.2189}},
+            {"place_id": f"mock_{city.lower()}_31", "name": "Photography Studio", "address": f"Art Street, {city}, India", "phone": "+91-9312345678", "website": "", "rating": 4.4, "total_ratings": 267, "category": business_type or "Photo Studio", "price_level": 2, "is_open": True, "location": {"lat": 28.6278, "lng": 77.2156}},
+            
+            # Pet Care
+            {"place_id": f"mock_{city.lower()}_32", "name": "Pet Clinic & Store", "address": f"Green Avenue, {city}, India", "phone": "+91-9201234567", "website": "", "rating": 4.5, "total_ratings": 189, "category": business_type or "Pet Shop", "price_level": 2, "is_open": True, "location": {"lat": 28.6256, "lng": 77.2212}},
+            {"place_id": f"mock_{city.lower()}_33", "name": "Pet Grooming Salon", "address": f"Pet Care Complex, {city}, India", "phone": "+91-9190123456", "website": "", "rating": 4.3, "total_ratings": 145, "category": business_type or "Pet Grooming", "price_level": 2, "is_open": True, "location": {"lat": 28.6245, "lng": 77.2234}},
+            
+            # Automotive
+            {"place_id": f"mock_{city.lower()}_34", "name": "Bike Service Center", "address": f"Auto Market, {city}, India", "phone": "+91-9089012345", "website": "", "rating": 4.1, "total_ratings": 234, "category": business_type or "Bike Repair", "price_level": 1, "is_open": True, "location": {"lat": 28.6189, "lng": 77.2201}},
+            {"place_id": f"mock_{city.lower()}_35", "name": "Car Accessories Shop", "address": f"Highway Road, {city}, India", "phone": "+91-9978901234", "website": "", "rating": 4.0, "total_ratings": 178, "category": business_type or "Auto Parts", "price_level": 2, "is_open": True, "location": {"lat": 28.6167, "lng": 77.2278}},
+            
+            # Financial Services
+            {"place_id": f"mock_{city.lower()}_36", "name": "Insurance Advisor", "address": f"Finance Street, {city}, India", "phone": "+91-9867890123", "website": "", "rating": 4.3, "total_ratings": 167, "category": business_type or "Insurance", "price_level": 2, "is_open": True, "location": {"lat": 28.6298, "lng": 77.2145}},
+            {"place_id": f"mock_{city.lower()}_37", "name": "Tax Consultant Office", "address": f"Business Center, {city}, India", "phone": "+91-9756789123", "website": "", "rating": 4.4, "total_ratings": 198, "category": business_type or "Tax Service", "price_level": 2, "is_open": True, "location": {"lat": 28.6312, "lng": 77.2167}},
+            
+            # Travel & Tourism
+            {"place_id": f"mock_{city.lower()}_38", "name": "Travel Agency", "address": f"Tourism Hub, {city}, India", "phone": "+91-9645678912", "website": "", "rating": 4.2, "total_ratings": 234, "category": business_type or "Travel Agent", "price_level": 2, "is_open": True, "location": {"lat": 28.6234, "lng": 77.2189}},
         ]
-        return mock_businesses
+        
+        logger.info(f"Generated {len(indian_businesses)} realistic mock leads for {city}")
+        return indian_businesses
 
     def search_businesses(
         self, 

@@ -52,6 +52,12 @@ except ImportError:
     logger.warning("A2A dependencies not found, falling back to simple HTTP client")
     A2A_AVAILABLE = False
 
+# Check if FORCE_SIMPLE_MODE is set
+FORCE_SIMPLE_MODE = os.getenv("FORCE_SIMPLE_MODE", "false").lower() == "true"
+if FORCE_SIMPLE_MODE:
+    logger.info("FORCE_SIMPLE_MODE enabled - using simple HTTP mode instead of A2A")
+    A2A_AVAILABLE = False
+
 # Ensure imports work
 try:
     import common.config
@@ -749,6 +755,34 @@ async def run_lead_finding_process(city: str, session_id: str):
             found_businesses = result.get("businesses", [])
             business_logger.info(f"Lead Finder returned {len(found_businesses)} businesses")
 
+            # Add found businesses to app state
+            for idx, biz_data in enumerate(found_businesses):
+                try:
+                    business_id = str(uuid.uuid4())
+                    business = Business(
+                        id=business_id,
+                        name=biz_data.get("name", f"Business {idx + 1}"),
+                        address=biz_data.get("address", ""),
+                        phone=biz_data.get("phone", ""),
+                        email=biz_data.get("email", ""),
+                        website=biz_data.get("website", ""),
+                        status=BusinessStatus.NEW,
+                        rating=biz_data.get("rating", 0.0),
+                        category=biz_data.get("category", ""),
+                        notes=[]
+                    )
+                    app_state["businesses"][business_id] = business
+                    business_logger.info(f"Added business: {business.name} (ID: {business_id})")
+                    
+                    # Send real-time update for each business
+                    await manager.send_update({
+                        "type": "business_found",
+                        "business": business.model_dump(),
+                        "timestamp": datetime.now().isoformat(),
+                    })
+                except Exception as e:
+                    business_logger.error(f"Error creating business from data: {e}", exc_info=True)
+
             # Send completion update regardless of whether businesses were found
             await manager.send_update({
                 "type": "lead_finding_completed",
@@ -959,6 +993,20 @@ async def read_root(request: Request) -> HTMLResponse:
             }
         )
 
+@app.get("/dashboard", response_class=HTMLResponse)
+async def dashboard(request: Request) -> HTMLResponse:
+    """Serves the dashboard page."""
+    return templates.TemplateResponse(
+        name="dashboard.html",
+        context={
+            "request": request,
+            "businesses": list(app_state["businesses"].values()),
+            "current_city": app_state["current_city"],
+            "is_running": app_state["is_running"],
+            "agent_updates": app_state["agent_updates"][-20:],  # Last 20 updates
+        }
+    )
+
 @app.get("/architecture_diagram", response_class=HTMLResponse)
 async def architecture_diagram(request: Request) -> HTMLResponse:
     """Serves the architecture diagram page."""
@@ -1001,7 +1049,7 @@ async def start_lead_finding(city: str = Form(...)):
         # Call Lead Finder agent asynchronously
         asyncio.create_task(run_lead_finding_process(request_data.city, app_state["session_id"]))
         
-        return RedirectResponse("/", status_code=303)
+        return RedirectResponse("/dashboard", status_code=303)
         
     except ValidationError as e:
         logger.error(f"Invalid city input: {e}")
@@ -1035,6 +1083,58 @@ async def get_status():
         "business_count": len(app_state["businesses"]),
         "session_id": app_state["session_id"],
     }
+
+@app.post("/api/add_lead")
+async def add_manual_lead(
+    name: str = Form(...),
+    phone: Optional[str] = Form(None),
+    email: Optional[str] = Form(None),
+    city: str = Form(...),
+    description: Optional[str] = Form(None)
+):
+    """Manually add a lead to the system."""
+    try:
+        # Create business object
+        business = Business(
+            name=name.strip(),
+            phone=phone.strip() if phone else None,
+            email=email.strip() if email else None,
+            city=city.strip(),
+            description=description.strip() if description else None,
+            status=BusinessStatus.FOUND
+        )
+        
+        # Add to app state
+        app_state["businesses"][business.id] = business
+        
+        # Set current city if not set
+        if not app_state["current_city"]:
+            app_state["current_city"] = business.city
+        
+        logger.info(f"Manually added lead: {business.name} (ID: {business.id})")
+        
+        # Send websocket update
+        await manager.send_update({
+            "type": "business_added",
+            "business": business.dict(),
+            "timestamp": datetime.now().isoformat(),
+        })
+        
+        return JSONResponse(
+            status_code=200,
+            content={
+                "success": True,
+                "business": business.dict(),
+                "message": "Lead added successfully"
+            }
+        )
+        
+    except Exception as e:
+        logger.error(f"Error adding manual lead: {e}", exc_info=True)
+        return JSONResponse(
+            status_code=500,
+            content={"error": f"Failed to add lead: {e}"}
+        )
 
 @app.post("/send_to_sdr")
 async def send_business_to_sdr(

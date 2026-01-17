@@ -64,6 +64,78 @@
             </div>
         </div>
 
+        <!-- Manual Lead Entry Section -->
+        <div style="margin: 20px 0;">
+            <button onclick="toggleManualLeadForm()" style="background: #10b981; color: white; padding: 12px 24px; border: none; border-radius: 8px; cursor: pointer; font-size: 16px; font-weight: 600; display: flex; align-items: center; gap: 8px; margin: 0 auto;">
+                <i class="fas fa-plus-circle"></i>
+                <span>Add Lead Manually</span>
+            </button>
+            
+            <div id="manual-lead-form" style="display: none; background: white; border-radius: 12px; padding: 24px; margin-top: 16px; box-shadow: 0 4px 6px rgba(0,0,0,0.1); max-width: 600px; margin-left: auto; margin-right: auto;">
+                <h3 style="margin-bottom: 20px; color: #1f2937; display: flex; align-items: center; gap: 8px;">
+                    <i class="fas fa-user-plus"></i>
+                    Add New Lead
+                </h3>
+                <form id="add-lead-form" onsubmit="submitManualLead(event)">
+                    <div style="display: grid; gap: 16px;">
+                        <div>
+                            <label style="display: block; font-weight: 600; color: #374151; margin-bottom: 6px;">
+                                <i class="fas fa-building" style="color: #6366f1;"></i>
+                                Business Name *
+                            </label>
+                            <input type="text" name="name" required style="width: 100%; padding: 10px; border: 2px solid #e5e7eb; border-radius: 6px; font-size: 14px;" placeholder="ABC Company">
+                        </div>
+                        
+                        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px;">
+                            <div>
+                                <label style="display: block; font-weight: 600; color: #374151; margin-bottom: 6px;">
+                                    <i class="fas fa-phone" style="color: #6366f1;"></i>
+                                    Phone
+                                </label>
+                                <input type="tel" name="phone" style="width: 100%; padding: 10px; border: 2px solid #e5e7eb; border-radius: 6px; font-size: 14px;" placeholder="+1 (555) 123-4567">
+                            </div>
+                            
+                            <div>
+                                <label style="display: block; font-weight: 600; color: #374151; margin-bottom: 6px;">
+                                    <i class="fas fa-envelope" style="color: #6366f1;"></i>
+                                    Email
+                                </label>
+                                <input type="email" name="email" style="width: 100%; padding: 10px; border: 2px solid #e5e7eb; border-radius: 6px; font-size: 14px;" placeholder="contact@example.com">
+                            </div>
+                        </div>
+                        
+                        <div>
+                            <label style="display: block; font-weight: 600; color: #374151; margin-bottom: 6px;">
+                                <i class="fas fa-map-marker-alt" style="color: #6366f1;"></i>
+                                City *
+                            </label>
+                            <input type="text" name="city" required style="width: 100%; padding: 10px; border: 2px solid #e5e7eb; border-radius: 6px; font-size: 14px;" placeholder="San Francisco" value="{{ current_city or '' }}">
+                        </div>
+                        
+                        <div>
+                            <label style="display: block; font-weight: 600; color: #374151; margin-bottom: 6px;">
+                                <i class="fas fa-info-circle" style="color: #6366f1;"></i>
+                                Description
+                            </label>
+                            <textarea name="description" rows="3" style="width: 100%; padding: 10px; border: 2px solid #e5e7eb; border-radius: 6px; font-size: 14px; resize: vertical;" placeholder="Brief description of the business..."></textarea>
+                        </div>
+                        
+                        <div style="display: flex; gap: 12px; margin-top: 8px;">
+                            <button type="submit" style="flex: 1; background: linear-gradient(135deg, #4ade80 0%, #22c55e 100%); color: white; padding: 12px; border: none; border-radius: 8px; cursor: pointer; font-size: 16px; font-weight: 600;">
+                                <i class="fas fa-check"></i>
+                                Add Lead
+                            </button>
+                            <button type="button" onclick="toggleManualLeadForm()" style="flex: 1; background: #e5e7eb; color: #374151; padding: 12px; border: none; border-radius: 8px; cursor: pointer; font-size: 16px; font-weight: 600;">
+                                <i class="fas fa-times"></i>
+                                Cancel
+                            </button>
+                        </div>
+                    </div>
+                </form>
+                <div id="add-lead-result" style="margin-top: 16px; padding: 12px; border-radius: 6px; display: none;"></div>
+            </div>
+        </div>
+
         <!-- Agent Columns -->
         <div class="agent-columns">
             <!-- Lead Finder Column -->
@@ -394,6 +466,56 @@
             </div>
         </div>
     </div>
+
+    <script>
+        // Manual lead form functions
+        function toggleManualLeadForm() {
+            const form = document.getElementById('manual-lead-form');
+            const result = document.getElementById('add-lead-result');
+            if (form.style.display === 'none') {
+                form.style.display = 'block';
+                result.style.display = 'none';
+                document.getElementById('add-lead-form').reset();
+            } else {
+                form.style.display = 'none';
+            }
+        }
+
+        async function submitManualLead(event) {
+            event.preventDefault();
+            const form = event.target;
+            const formData = new FormData(form);
+            const resultDiv = document.getElementById('add-lead-result');
+            
+            try {
+                const response = await fetch('/api/add_lead', {
+                    method: 'POST',
+                    body: formData
+                });
+                
+                const data = await response.json();
+                
+                if (response.ok && data.success) {
+                    resultDiv.style.display = 'block';
+                    resultDiv.style.background = '#d1fae5';
+                    resultDiv.style.color = '#065f46';
+                    resultDiv.innerHTML = '<i class=\"fas fa-check-circle\"></i> Lead added successfully! Refreshing...';
+                    
+                    // Reload page after 1 second to show new lead
+                    setTimeout(() => {
+                        window.location.reload();
+                    }, 1000);
+                } else {
+                    throw new Error(data.error || 'Failed to add lead');
+                }
+            } catch (error) {
+                resultDiv.style.display = 'block';
+                resultDiv.style.background = '#fee2e2';
+                resultDiv.style.color = '#991b1b';
+                resultDiv.innerHTML = '<i class=\"fas fa-exclamation-circle\"></i> Error: ' + error.message;
+            }
+        }
+    </script>
 
     <script src="/static/js/dashboard.js"></script>
 </body>

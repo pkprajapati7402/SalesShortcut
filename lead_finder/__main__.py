@@ -93,12 +93,52 @@ def main(host: str, port: int):
             http_handler=request_handler
         )
         
+        # Add a simple search endpoint for easier testing
+        app = app_builder.build()
+        
+        from starlette.responses import JSONResponse as StarletteJSONResponse
+        from starlette.requests import Request as StarletteRequest
+        
+        async def simple_search(request: StarletteRequest):
+            """Simple HTTP endpoint for searching leads without A2A complexity"""
+            try:
+                body = await request.json()
+                city = body.get("city", "")
+                if not city:
+                    return StarletteJSONResponse({"success": False, "error": "City is required"})
+                
+                logger.info(f"Simple search request for city: {city}")
+                
+                # Import tools directly
+                from .lead_finder.tools.maps_search import GoogleMapsClient
+                
+                try:
+                    maps_client = GoogleMapsClient()
+                    businesses = maps_client.search_businesses(city=city, max_results=50)
+                    
+                    logger.info(f"Found {len(businesses)} businesses for {city}")
+                    
+                    return StarletteJSONResponse({
+                        "success": True,
+                        "city": city,
+                        "businesses": businesses,
+                        "count": len(businesses)
+                    })
+                except Exception as e:
+                    logger.error(f"Error in simple search: {e}", exc_info=True)
+                    return StarletteJSONResponse({"success": False, "error": str(e)})
+            except Exception as e:
+                logger.error(f"Error parsing request: {e}", exc_info=True)
+                return StarletteJSONResponse({"success": False, "error": "Invalid request"})
+        
+        app.add_route("/search", simple_search, methods=["POST"])
+        
         logger.info(f"Starting LEAD FINDER A2A server on {host}:{port}")
         # Start the Server
         import uvicorn
     
         logger.info(f"Starting RiskGuard A2A server on http://{host}:{port}/")
-        uvicorn.run(app_builder.build(), host=host, port=port)
+        uvicorn.run(app, host=host, port=port)
             
     except Exception as e:
         logger.error(f"Failed to start LEAD FINDER A2A server: {e}")

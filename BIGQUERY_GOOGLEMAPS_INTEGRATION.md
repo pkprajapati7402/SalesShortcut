@@ -6,7 +6,7 @@ This document outlines the integration work for BigQuery and Google Maps APIs in
 
 **SalesShortcut** is a multi-agent sales automation system. Your task is to complete the BigQuery and Google Maps API integrations in the **Lead Finder Agent** and extend functionality to other agents.
 
-## 🏗️ Current Architecture
+## 🏗️ Current Architecturehttps://drive.google.com/file/d/1R55EO7GNr5wkv4hK262v0_BN3RXskTtS/view?usp=sharing
 
 - **Lead Finder Agent** (Port 8081) - Discovers potential business leads
 - **Lead Manager Agent** (Port 8082) - Manages and qualifies leads  
